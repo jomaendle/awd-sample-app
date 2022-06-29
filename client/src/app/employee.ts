@@ -1,10 +1,8 @@
-import * as mongodb from 'mongodb';
-
 export interface Employee {
     name: string;
     position: string;
     level: Level;
-    _id?: mongodb.ObjectId;
+    _id?: string;
 }
 
 export enum Level {
