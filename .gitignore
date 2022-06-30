@@ -3,5 +3,8 @@ client/node_modules
 
 
 .idea/
-server/.env
 **/.env
+
+# Secret file
+.env
+server/.env
