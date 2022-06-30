@@ -1,0 +1,44 @@
+<form [formGroup]="employeeForm" autocomplete="off" (ngSubmit)="submitForm()">
+  <!-- Name -->
+  <div class="input-group">
+    <label for="name">Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      formControlName="name"
+      placeholder="Name"
+      required />
+  </div>
+
+  <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="alert alert-danger">
+    <div *ngIf="name?.errors?.['required']">Name is required.</div>
+    <div *ngIf="name?.errors?.['minlength']">Name must be at least 5 characters long.</div>
+  </div>
+
+  <!-- Position -->
+  <div class="input-group">
+    <label for="position">Position</label>
+    <input
+      type="text"
+      class="form-control"
+      id="position"
+      formControlName="position"
+      placeholder="Position"
+      required />
+  </div>
+
+  <div
+    *ngIf="position?.invalid && (position?.dirty || position?.touched)"
+    class="alert alert-danger">
+    <div *ngIf="position?.errors?.['required']">Position is required.</div>
+    <div *ngIf="position?.errors?.['minlength']">Position must be at least 5 characters long.</div>
+  </div>
+
+  <!-- Level -->
+  <div class="input-group">
+    <div class="form-check" *ngFor="let step of levelType | keyvalue">
+      {{ step.key }}
+    </div>
+  </div>
+</form>

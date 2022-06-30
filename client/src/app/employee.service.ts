@@ -1,13 +1,50 @@
-import { Injectable } from '@angular/core';
-import {Subject} from "rxjs";
-import {Employee} from "./employee";
+import { Injectable, OnDestroy } from '@angular/core';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
+import { Employee } from './employee';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class EmployeeService {
-  private _BASE_URL: string = "http://localhost:5200";
+export class EmployeeService implements OnDestroy {
+  private _BASE_URL: string = 'http://localhost:5200';
   private _employees: Subject<Employee[]> = new Subject<Employee[]>();
+  private _destroy$: Subject<void> = new Subject<void>();
 
-  constructor() { }
+  headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
+
+  constructor(private _httpClient: HttpClient) {}
+
+  ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
+  getEmployee(id: string): Observable<Employee> {
+    return this._httpClient.get<Employee>(`${this._BASE_URL}/employees/${id}`);
+  }
+
+  createEmployee(employee: Employee): Observable<string> {
+    return this._httpClient.post<string>(`${this._BASE_URL}/employees`, employee);
+  }
+
+  updateEmployee(employee: Employee): Observable<string> {
+    return this._httpClient.put<string>(`${this._BASE_URL}/employees/${employee._id}`, employee);
+  }
+
+  deleteEmployee(id: string): Observable<string> {
+    return this._httpClient.delete<string>(`${this._BASE_URL}/employees/${id}`);
+  }
+
+  getEmployees(): Observable<Employee[]> {
+    this._refreshEmployees();
+    return this._employees.asObservable();
+  }
+
+  private _refreshEmployees(): void {
+    this._httpClient
+      .get<Employee[]>(`${this._BASE_URL}/employees`)
+      .pipe(takeUntil(this._destroy$))
+      .subscribe((employees) => this._employees.next(employees));
+  }
 }
