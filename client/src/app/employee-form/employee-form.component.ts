@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { Employee, Level } from '../employee';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -19,11 +19,11 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 })
 export class EmployeeFormComponent implements OnInit, OnDestroy {
   @Input()
-  initialState: BehaviorSubject<Employee> = new BehaviorSubject<Employee>({
-    name: 'Jo ',
-    level: Level.MIDDLE,
-    position: 'Frontend Engineer',
-  });
+  set initialState(employee: Employee | null) {
+    if (employee) {
+      this._initialState.next(employee);
+    }
+  }
 
   @Output()
   formValueChanged = new EventEmitter<Employee>();
@@ -38,6 +38,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   });
 
   private _destroy$: Subject<void> = new Subject<void>();
+  private _initialState: ReplaySubject<Employee> = new ReplaySubject<Employee>();
 
   constructor() {}
 
@@ -58,7 +59,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.initialState?.subscribe((employee: Employee) =>
+    this._initialState.subscribe((employee: Employee) =>
       this.employeeForm.patchValue({
         name: employee.name,
         position: employee.position,
@@ -77,6 +78,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   }
 
   submitForm(): void {
+    console.log(this.employeeForm.value);
     this.formSubmitted.emit(this.employeeForm.value);
   }
 }

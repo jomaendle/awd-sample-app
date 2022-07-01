@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Employee } from '../employee';
 import { Observable } from 'rxjs';
 import { EmployeeService } from '../employee.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employees-list',
@@ -12,14 +13,16 @@ import { EmployeeService } from '../employee.service';
 export class EmployeesListComponent implements OnInit {
   employees$: Observable<Employee[]> = new Observable<Employee[]>();
 
-  constructor(private _employeesService: EmployeeService) {}
+  constructor(private _employeesService: EmployeeService, private _router: Router) {}
 
   ngOnInit(): void {
     this._fetchEmployees();
   }
 
   deleteEmployee(id: string): void {
-    this._employeesService.deleteEmployee(id);
+    this._employeesService.deleteEmployee(id).subscribe(() => {
+      this._fetchEmployees();
+    });
   }
 
   private _fetchEmployees(): void {

@@ -37,8 +37,16 @@
 
   <!-- Level -->
   <div class="input-group">
-    <div class="form-check" *ngFor="let step of levelType | keyvalue">
-      {{ step.key }}
+    <div class="form-check" *ngFor="let step of (levelType | keyvalue).slice(0, 3)">
+      <label [for]="'level-' + step" class="form-check-label">{{ step.value }}</label>
+      <input
+        type="radio"
+        formControlName="level"
+        [value]="step.key"
+        name="level"
+        [id]="'level-' + step.value" />
     </div>
   </div>
+
+  <button type="submit" [disabled]="employeeForm.invalid">Add</button>
 </form>
