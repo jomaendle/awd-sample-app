@@ -17,10 +17,12 @@ if (!ATLAS_URI) {
 connectToDatabase(ATLAS_URI)
   .then(() => {
     const app = express();
+    const apiRoute = "/.netlify/functions/server/employees";
+
     app.use(cors());
 
     // Add routes
-    app.use("/employees", employeeRouter);
+    app.use(apiRoute, employeeRouter);
 
     // start Express server
     app.listen(5200, () => {

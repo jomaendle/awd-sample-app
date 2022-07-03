@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root',
 })
 export class EmployeeService implements OnDestroy {
-  private _BASE_URL: string = 'http://localhost:5200';
+  private _BASE_URL: string = 'http://localhost:5200/.netlify/functions/server/employees';
   private _employees: Subject<Employee[]> = new Subject<Employee[]>();
   private _destroy$: Subject<void> = new Subject<void>();
 
@@ -21,23 +21,23 @@ export class EmployeeService implements OnDestroy {
   }
 
   getEmployee(id: string): Observable<Employee> {
-    return this._httpClient.get<Employee>(`${this._BASE_URL}/employees/${id}`);
+    return this._httpClient.get<Employee>(`${this._BASE_URL}/${id}`);
   }
 
   createEmployee(employee: Employee): Observable<string> {
-    return this._httpClient.post(`${this._BASE_URL}/employees`, employee, {
+    return this._httpClient.post(`${this._BASE_URL}`, employee, {
       responseType: 'text',
     });
   }
 
   updateEmployee(employee: Employee): Observable<string> {
-    return this._httpClient.put(`${this._BASE_URL}/employees/${employee._id}`, employee, {
+    return this._httpClient.put(`${this._BASE_URL}/${employee._id}`, employee, {
       responseType: 'text',
     });
   }
 
   deleteEmployee(id: string): Observable<string> {
-    return this._httpClient.delete(`${this._BASE_URL}/employees/${id}`, {
+    return this._httpClient.delete(`${this._BASE_URL}/${id}`, {
       responseType: 'text',
     });
   }
@@ -49,7 +49,7 @@ export class EmployeeService implements OnDestroy {
 
   private _refreshEmployees(): void {
     this._httpClient
-      .get<Employee[]>(`${this._BASE_URL}/employees`)
+      .get<Employee[]>(`${this._BASE_URL}`)
       .pipe(takeUntil(this._destroy$))
       .subscribe((employees) => this._employees.next(employees));
   }

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx ts-node src/server.ts",
+    "build": "cd ../client && ng build --prod && cd ../server && npx tsc && netlify-lambda build dist"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +15,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "mongodb": "^4.7.0"
+    "mongodb": "^4.7.0",
+    "netlify-lambda": "^2.0.15",
+    "serverless-http": "^3.0.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
