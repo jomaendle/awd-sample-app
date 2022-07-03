@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx ts-node src/server.ts",
-    "build": "cd ../client && npm i && ng build --prod && cd ../server && npx tsc && netlify-lambda build dist"
+    "build": "cd ../client && npm i -g @angular/cli && npm i && ng build --prod && cd ../server && npx tsc && netlify-lambda build dist"
   },
   "keywords": [],
   "author": "",
