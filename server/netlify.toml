@@ -5,7 +5,3 @@ publish = "../dist/sample-app"
 
 functions = "functions"
 
-[[redirects]]
-from = "/*"
-to = "../dist/sample-app/index.html"
-status = 200
