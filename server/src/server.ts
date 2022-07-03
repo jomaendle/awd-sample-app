@@ -3,7 +3,7 @@ import cors from "cors";
 import express from "express";
 import { connectToDatabase } from "./database";
 import * as path from "path";
-import { employeeRouter } from "./employee.routes";
+import { employeeRouter } from "./employee_routes";
 
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
