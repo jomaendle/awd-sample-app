@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subject, switchMap, take } from 'rxjs';
 import { Employee } from '../employee';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../employee.service';
@@ -11,7 +11,7 @@ import { EmployeeService } from '../employee.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditEmployeeComponent implements OnInit {
-  employee$: Subject<Employee> = new Subject<Employee>();
+  employee$: ReplaySubject<Employee> = new ReplaySubject<Employee>();
 
   constructor(
     private _router: Router,
@@ -26,9 +26,16 @@ export class EditEmployeeComponent implements OnInit {
     });
   }
 
-  editEmployee(employee: Employee): void {
-    this._employeesService.updateEmployee(employee).subscribe(() => {
-      this._router.navigate(['/employees']);
-    });
+  onEmployeeChanged(changedEmployee: Employee): void {
+    this.employee$
+      .pipe(
+        take(1),
+        switchMap((employee: Employee) => {
+          return this._employeesService.updateEmployee(employee._id || '', changedEmployee);
+        })
+      )
+      .subscribe(() => {
+        this._router.navigate(['/employees']);
+      });
   }
 }

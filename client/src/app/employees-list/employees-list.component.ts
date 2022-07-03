@@ -25,6 +25,10 @@ export class EmployeesListComponent implements OnInit {
     });
   }
 
+  editEmployee(id: string): void {
+    this._router.navigate(['/employees', 'edit', id]);
+  }
+
   private _fetchEmployees(): void {
     this.employees$ = this._employeesService.getEmployees();
   }

@@ -30,8 +30,9 @@ export class EmployeeService implements OnDestroy {
     });
   }
 
-  updateEmployee(employee: Employee): Observable<string> {
-    return this._httpClient.put(`${this._BASE_URL}/${employee._id}`, employee, {
+  updateEmployee(id: string, employee: Employee): Observable<string> {
+    console.log(employee);
+    return this._httpClient.put(`${this._BASE_URL}/${id}`, employee, {
       responseType: 'text',
     });
   }

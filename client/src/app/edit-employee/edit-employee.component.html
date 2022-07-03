@@ -1,2 +1,4 @@
 <h2>Edit Employee</h2>
-<app-employee-form [initialState]="employee$ | async"></app-employee-form>
+<app-employee-form
+  [initialState]="employee$ | async"
+  (formSubmitted)="onEmployeeChanged($event)"></app-employee-form>
